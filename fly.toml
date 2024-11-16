@@ -1,5 +1,5 @@
 app = '5-stacks'
-primary_region = 'sin'
+primary_region = 'sjc'
 console_command = 'php /var/www/html/artisan tinker'
 
 [deploy]
