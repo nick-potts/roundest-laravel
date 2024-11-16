@@ -9,9 +9,6 @@ strategy = 'immediate'
 APP_ENV = 'production'
 
 [http_service]
-checks = [
-    { path = '/up', interval = '10s', timeout = '2s' }
-]
 internal_port = 8000
 force_https = true
 auto_stop_machines = 'stop'
