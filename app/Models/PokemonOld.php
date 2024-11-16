@@ -1,18 +1,16 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Models;
 
-use App\Models\Pokemon;
+use Illuminate\Database\Eloquent\Model;
+use Sushi\Sushi;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-
-class DatabaseSeeder extends Seeder
+class PokemonOld extends Model
 {
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
+    use Sushi;
+    public $timestamps = false;
+
+    public function getRows(): array
     {
         $query = '
             query GetAllPokemon {
@@ -30,14 +28,20 @@ class DatabaseSeeder extends Seeder
 
         $pokemon = $response->json('data.pokemon_v2_pokemon');
 
-        $pokemon = collect($pokemon)->map(function ($pokemon) {
+        return collect($pokemon)->map(function ($pokemon) {
             return [
                 'id' => $pokemon['id'],
                 'name' => $pokemon['pokemon_v2_pokemonspecy']['name'],
-                'url' => "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{$pokemon['id']}.png",
+                'dex_number' => $pokemon['id'],
+                'imageUrl' => "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{$pokemon['id']}.png",
             ];
         })->all();
-
-        Pokemon::insert($pokemon);
     }
+
+    protected function sushiShouldCache(): bool
+    {
+        return true;
+    }
+
+
 }

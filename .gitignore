@@ -20,3 +20,9 @@ yarn-error.log
 /.idea
 /.vscode
 /.zed
+
+**/caddy
+frankenphp
+frankenphp-worker.php
+
+storage/debugbar
