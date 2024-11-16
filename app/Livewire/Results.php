@@ -3,22 +3,27 @@
 namespace App\Livewire;
 
 use App\Models\Pokemon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Results extends Component
 {
+    use WithPagination;
 
-    #[Computed]
-    public function pokemons(): Collection
+    public Collection $pokemons;
+
+    public function mount(): void
     {
-        return Pokemon::query()
-            ->withCount(['loss', 'win'])
-            ->get();
-//            ->each
-//            ->append('win_percentage')
-//            ->sortByDesc(['win_percentage', 'win_count']);
+        $this->pokemons = Pokemon::results(limit: true);
+    }
+
+    public function loadMore(): void
+    {
+        $this->pokemons = Pokemon::results(limit: false);
     }
 
     public function render()

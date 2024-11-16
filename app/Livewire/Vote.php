@@ -2,19 +2,15 @@
 
 namespace App\Livewire;
 
-use AllowDynamicProperties;
 use App\Models\Pokemon;
-use Livewire\Attributes\Computed;
 use Livewire\Component;
-use Webmozart\Assert\Assert;
 
-#[AllowDynamicProperties]
 class Vote extends Component
 {
     public array $pokemons;
     public array $nextTen;
 
-    public function mount()
+    public function mount(): void
     {
         $this->pokemons = Pokemon::fetch(2);
         $this->nextTen = Pokemon::fetch(10);
@@ -22,14 +18,9 @@ class Vote extends Component
 
     public function vote(int $index): \Illuminate\Http\RedirectResponse
     {
-        Assert::lessThan($index, 2);
-        $winner = $this->pokemons[$index];
-        $loser = $this->pokemons[1 - $index % 2];
-
-        \App\Models\Vote::create([
-            'winner_id' => $winner->id,
-            'loser_id' => $loser->id,
-        ]);
+        \App\Models\Vote::insert([
+            'winner_id' => $this->pokemons[$index]->id,
+            'loser_id' => $this->pokemons[1 - $index % 2]->id]);
 
         $this->pokemons = \Arr::take($this->nextTen, 2);
         $this->nextTen = [
@@ -40,7 +31,7 @@ class Vote extends Component
         return redirect()->back();
     }
 
-    public function render()
+    public function render(): \Illuminate\View\View
     {
         return view('livewire.vote');
     }
