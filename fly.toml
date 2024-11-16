@@ -5,11 +5,6 @@ console_command = 'php /var/www/html/artisan tinker'
 [deploy]
 strategy = 'immediate'
 
-[build]
-[build.args]
-NODE_VERSION = '18'
-PHP_VERSION = '8.2'
-
 [env]
 APP_ENV = 'production'
 
